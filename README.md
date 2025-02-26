@@ -67,7 +67,7 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ### Architecture
 <p align="center">
-    <img src="Screenshots/flowchart.PrescriptA.jpg" alt="Architecture"  width="600" height="600">
+    <img src="Screenshots/flowchart.PrescriptA.jpg" alt="Architecture"  width="600" height="450">
 </p>
 
 - The frontend is built with **Streamlit** for a simple UI, while the backend leverages **Python, OCR (pdf2image, PIL), and Gemini AI (Google API)** for prescription reading and chatbot responses.  
@@ -142,28 +142,16 @@ Click [here](https://heal-smart.vercel.app/) to visit the web app directly.
 
 ## Use Cases
 
-- **Symptom Analysis and Diagnosis:** Input symptoms to get potential diagnoses and find relevant specialist doctors.
-
-
-- **Mental Health Support:** Engage in empathetic conversations for mental health guidance and professional help suggestions.
-
-
-- **Doctor Consultation:** Find, view profiles, and proceed for booking healthcare providers.
-
-
-- **Preventive Healthcare:** Receive timely recommendations for screenings, vaccinations, and lifestyle changes.
-
-
-- **Disease Management:** Track symptoms and receive personalized recommendations for effective management.
-
-
-- **Remote Healthcare Access:** Access healthcare guidance and support remotely without physical visits.
-
-
-- **Post-Appointment Follow-up:** Track symptoms, medication adherence, and access support after appointments.
-
-
-- **Healthcare Provider Collaboration:** Collaborate with healthcare providers for personalized recommendations and progress monitoring.
+-  **Automated Prescription Processing** – AI reads and extracts details from **handwritten and electronic prescriptions**.  
+-  **Pharmacy Inventory Management** – Tracks **medicine availability** and prevents **stock shortages**.  
+-  **AI Chatbot Assistance** – Answers **medicine-related queries** for **pharmacists and patients**.  
+-  **Medication Ordering & Billing** – Generates **orders and bills** directly from **prescriptions**.  
+-  **Patient Medicine Availability Check** – Allows users to **check stock** before visiting a **pharmacy**.  
+-  **Online Medicine Ordering** – Enables **patients** to place **orders** through the **patient interface**.  
+-  **Drug Interaction & Dosage Analysis** – Identifies **potential risks** and provides **accurate dosage information**.  
+-  **Automated Medication Reminders** – Sends **alerts via MediClock** to improve **patient adherence**.  
+-  **Insurance & Prescription Validation** – Helps process **insurance claims** by **validating prescriptions**.  
+-  **Hospital & Clinic Integration** – Streamlines **medication management** within **healthcare facilities**.  
 
 
 
