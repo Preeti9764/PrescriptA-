@@ -45,11 +45,11 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 </div>
 <div align="center">
     <img src="Screenshots/Screenshot (360).png" alt="remainder" width="380" height="225">
-    <img src="Screenshots/Screenshot (361).png" alt="" width="380" height="225">
+    <img src="Screenshots/Screenshot (361).png" alt="medbot" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (362).png" alt="Consult Doctor" width="180" height="225">
-   <img src="Screenshots/Screenshot orders.png" alt="Consult Doctor" width="180" height="225">
-    <img src="Screenshots/Screenshot (363).png" alt="Doctor Appointment" width="380" height="225">
+    <img src="Screenshots/Screenshot (362).png" alt="mediclock" width="180" height="225">
+   <img src="Screenshots/Screenshot orders.png" alt="order" width="180" height="225">
+    <img src="Screenshots/Screenshot (363).png" alt="overall" width="380" height="225">
 </div>
 
