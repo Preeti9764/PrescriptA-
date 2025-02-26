@@ -60,7 +60,7 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 - **ML Libraries:** Streamlit,Requests,Pillow(PIL),pdf2image,Base64,smtplib,io,re
 - **APIs:** Gemini API
 - **Database:** Firebase Firestore
-- **Tools:** Lightning ai studio, Postman, VS Code
+- **Tools:** Lightning ai studio, VS Code
 
   ## Design Idea & Approach
 
@@ -106,6 +106,7 @@ I got a sample prescription from google as mock data since I can't get access to
    - Python (version 3.x)
    - pip (Python package installer)
    - Virtual environment (optional but recommended)
+   - preferred to use lightning ai for faster processing
       
 2.  Install Python dependencies by running:
    ```
