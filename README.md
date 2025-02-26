@@ -14,6 +14,6 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 <br>
 <p align="center">
-    <img src="Screenshots/image.pris.jpg" alt="Key Features" width="150" height="150">
+    <img src="Screenshots/image.pris.jpg" alt="Key Features" width="250" height="150">
 </p>
 
