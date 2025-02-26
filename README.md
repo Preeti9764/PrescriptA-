@@ -17,3 +17,9 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
     <img src="Screenshots/image.pris.jpg" alt="Key Features" width="250" height="200">
 </p>
 
+✅ Prescription Reader – A Python-based AI model that accurately reads and analyzes handwritten prescriptions, minimizing human errors.
+🤖 PharmBot – An intelligent chatbot that assists pharmacists and patients by answering queries about prescribed medicines, dosages, and potential interactions.
+📦 Medication Database – A structured inventory system that tracks medicine availability in real time, ensuring stock is managed effectively.
+💳 Order & Billing – An automated system that cross-checks prescriptions, processes orders, and generates bills seamlessly, improving workflow efficiency.
+⏳ MediClock- it ensures that patients never miss a dose by allowing them to schedule medication reminders via email.
+
