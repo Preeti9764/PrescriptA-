@@ -53,3 +53,12 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
     <img src="Screenshots/Screenshot (363).png" alt="overall" width="380" height="225">
 </div>
 
+## Technologies Used
+- **Frontend:** React JS, HTML,CSS
+- **Backend:** Python (Streamlit)
+- **ML Techniquies:** NLP,PAI-driven OCR (Optical Character Recognition)
+- **ML Libraries:** pandas, numpy, scikit-learn
+- **APIs:** Gemini API
+- **Database:** Firebase Firestore
+- **Tools:** Google Collab, Google AI Studio, Postman, VS Code
+
