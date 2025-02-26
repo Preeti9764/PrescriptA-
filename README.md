@@ -132,10 +132,6 @@ I got a sample prescription from google as mock data since I can't get access to
 -  **Hospital & Clinic Integration** – Streamlines **medication management** within **healthcare facilities**.  
 
 
-
-
-
-
 ### *Social Impact of Priscripta*  
 
 -  **Reduces Prescription Errors** – Prevent deaths and healthcare complications due to misinterpretation of Prescription
@@ -147,13 +143,9 @@ I got a sample prescription from google as mock data since I can't get access to
 ## Scopes of Improvement
 
 
-- **Enhance Symptom Analysis Accuracy:** Improve ML model accuracy and dataset comprehensiveness.
-   
+- **Patient Interface:** Create a separate interface for patients and pharmacists where Pharmacist can keep track of medicine database while patient can check availability of medicines and place orders.
 - **User Login:** Create an authentication system for users so that they can store their data always.
-- **Integration of Telemedicine:** Facilitate virtual consultations for user convenience.
-- **User Experience Refinement:** Gather feedback for intuitive interface enhancements.
-- **Personalization and Customization:** Tailor content to individual preferences for better engagement.
-- **Comprehensive Data Security:** Strengthen privacy measures for user trust and compliance.
-- **Implement Proper Booking System:** Develop a robust booking system leveraging real healthcare database for streamlined appointment scheduling.
+- **User Interface:** Create more interactive user interface making it more convinient to use.
+- **Mobile App:** Create a mobile app for the same to increase scalability and reach.
 
 
