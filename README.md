@@ -85,7 +85,7 @@ I got a sample prescription from google as mock data since I can't get access to
 ### Machine Learning Lifecycle
 
 <p align="center">
-    <img src="screenshots/ml_lifecycle.jpeg" alt="ML Lifecycle" width="600" height="379">
+    <img src="screenshots/projectflow.jpeg" alt="ML Lifecycle" width="600" height="379">
 </p>
 
 The machine learning lifecycle begins with exploratory data analysis (EDA). The dataset, consisting of 132 columns of categorical data (0 or 1), covered 42 diseases, each with 120 balanced samples. We ensured data consistency, corrected naming inconsistencies, and focused on 12 diseases for prototyping.
