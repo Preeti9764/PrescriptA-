@@ -86,14 +86,13 @@ I got a sample prescription from google as mock data since I can't get access to
 
 <p align="center">
     <img src="Screenshots/projectflow.jpg" alt="ML Lifecycle" width="600" height="500">
-</p>
+</p>  
 
-The machine learning cycle in this process starts with a user uploading a prescription, which undergoes file type classification. If the file is a PDF, it is first converted into an image before being encoded in Base64 format. The system then performs document type classification to determine if it is a valid prescription. Once classified, prescription data extraction is carried out using Optical Character Recognition (OCR) and Natural Language Processing (NLP) techniques to retrieve relevant medical information. The extracted data is then analyzed to generate a structured medication order.
+- The **machine learning cycle** in this process starts with a user **uploading a prescription**, which undergoes **file type classification**. If the file is a **PDF**, it is first **converted into an image** before being **encoded in Base64 format**. The system then performs **document type classification** to determine if it is a **valid prescription**. Once classified, **prescription data extraction** is carried out using **Optical Character Recognition (OCR)** and **Natural Language Processing (NLP)** techniques to retrieve **relevant medical information**. The **extracted data** is then **analyzed** to generate a **structured medication order**.  
 
-Next, the medication order is matched against a predefined medication database to verify availability and accuracy. If a match is found, the pharmacy stock is updated accordingly. The processed orders are then displayed for review, after which they can be exported to a CSV file for further processing or record-keeping.
+- Next, the **medication order** is matched against a **predefined medication database** to verify **availability and accuracy**. If a **match is found**, the **pharmacy stock is updated accordingly**. The **processed orders** are then **displayed for review**, after which they can be **exported to a CSV file** for **further processing or record-keeping**.  
 
-In parallel, the system also provides additional functionalities such as handling chat queries by responding to user questions and setting up medicine reminders. The reminders are scheduled and sent to users via email notifications, ensuring adherence to prescribed medication schedules. Through this structured pipeline, the system integrates machine learning techniques with practical healthcare applications, streamlining prescription processing and medication management efficiently.
-
+- In parallel, the system also provides **additional functionalities** such as **handling chat queries** by **responding to user questions** and **setting up medicine reminders**. The **reminders** are **scheduled** and **sent to users via email notifications**, ensuring **adherence to prescribed medication schedules**. Through this **structured pipeline**, the system integrates **machine learning techniques** with **practical healthcare applications**, **streamlining prescription processing and medication management efficiently**.
 
 
 
