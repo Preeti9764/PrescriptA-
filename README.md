@@ -100,7 +100,6 @@ I divided the dataset into X (60 columns) and Y (1 column) and applied an 80:20 
 ## Getting Started
 
 
-Click [here](https://heal-smart.vercel.app/) to visit the web app directly.
 
 ### Setting up the ML Model API locally
 
@@ -108,20 +107,8 @@ Click [here](https://heal-smart.vercel.app/) to visit the web app directly.
    - Python (version 3.x)
    - pip (Python package installer)
    - Virtual environment (optional but recommended)
-2. Navigate to the `server` directory in the project.
-3. Create a Python virtual environment using the command (optional):
-   ```
-   virtualenv venv
-   ```
-4. Activate the virtual environment (only if you have followed step 3):
-   - On Unix/Linux:
-     ```
-     source venv/bin/activate
-     ```
-   - On Windows:
-     ```
-     venv\Scripts\activate
-     ```
+     
+   
 5. Install Python dependencies by running:
    ```
    pip install -r requirements.txt
@@ -190,9 +177,3 @@ Click [here](https://heal-smart.vercel.app/) to visit the web app directly.
 - **Implement Proper Booking System:** Develop a robust booking system leveraging real healthcare database for streamlined appointment scheduling.
 
 
-
-
-## References
-
-
-- Link to Dataset: https://www.kaggle.com/datasets/kaushil268/disease-prediction-using-machine-learning
