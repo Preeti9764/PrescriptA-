@@ -67,16 +67,13 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ### Architecture
 <p align="center">
-    <img src="Screenshots/flowchart.PrescriptA.jpg" alt="Architecture"  width="600" height="329">
+    <img src="Screenshots/flowchart.PrescriptA.jpg" alt="Architecture"  width="600" height="600">
 </p>
 
-HealSmart offers a comprehensive healthcare solution by leveraging modern technologies and user-friendly design principles. The architecture is built around three main divisions:
-
-1. **Symptom Analysis:** HealSmart diagnoses diseases based on symptoms using a Flask API connected to a trained ML model. The predicted disease is received as a response from the API, and then it guides users to the appropriate specialist doctor for further consultation. Additionally, there's an AI-driven chatbot, developed using the Gemini API, which offers preliminary suggestions based on the symptoms and disease.
-2. **Mind-Bot:** To address mental health concerns, I developed a chat application powered by the Gemini API from Google AI Studio. The Gemini 1.5 pro model is feeded with system instructions and trained with some conversations to provide empathetic consultations. This chatbot provides support for mental health issues like loneliness and anxiety and also offers suggestions on how to handle them effectively.
-
-3. **Consult Doctor:** HealSmart enables users to find and book appointments with doctors across various specialties. Data is fetched from Firebase Firestore, where dummy healthcare provider datas are maintained. Users can explore doctors' profiles, view their basic details and ratings, and check for their availability. This feature streamlines the process of finding and scheduling appointments, enhancing the overall healthcare experience for users.
-
+- The frontend is built with **Streamlit** for a simple UI, while the backend leverages **Python, OCR (pdf2image, PIL), and Gemini AI (Google API)** for prescription reading and chatbot responses.  
+- **Priscripta** extracts **handwritten and electronic prescription details** using **OCR & AI**, ensuring **accurate medication identification**. The system **validates prescriptions** against a **medication database**, preventing **errors and stock issues**.  
+- This **AI-driven chatbot**, powered by **Gemini AI**, provides **instant responses** to **pharmacist and patient queries** regarding **dosage, side effects, drug interactions, and medicine instructions**.  
+- Initially designed for **limited concurrent users**, the system will scale using **cloud-based AI models, SQL/NoSQL databases, and server load balancing**. Future enhancements include **local AI models for cost efficiency**.
 
 ### Data Set Desciption
 
