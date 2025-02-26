@@ -27,3 +27,24 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ⏳ **MediClock**- it ensures that patients never miss a dose by allowing them to schedule medication reminders via email.
 
+## Demo
+
+
+### Screenshots
+<div align="center">
+    <img src="screenshots/home_page.png" alt="Home Page" width="380" height="225">
+    <img src="screenshots/symptom_analysis.png" alt="Symptom Analysis" width="380" height="225">
+</div>
+<div align="center">
+    <img src="screenshots/analysis_result.png" alt="Analysis Result" width="380" height="225">
+    <img src="screenshots/ai_consultation.png" alt="AI Consultation" width="380" height="225">
+</div>
+<div align="center">
+    <img src="screenshots/mind_bot.png" alt="Mind-Bot" width="380" height="225">
+    <img src="screenshots/mind_bot_response.png" alt="Mind-Bot Response" width="380" height="225">
+</div>
+<div align="center">
+    <img src="screenshots/consult_doctor.png" alt="Consult Doctor" width="380" height="225">
+    <img src="screenshots/doctor_appointment.png" alt="Doctor Appointment" width="380" height="225">
+</div>
+
