@@ -156,15 +156,20 @@ Click [here](https://heal-smart.vercel.app/) to visit the web app directly.
 
 
 
-## Social Impact
 
 
-- **Enhanced Accessibility:** Easier access to healthcare, reducing disparities.
+### *Social Impact of Priscripta*  
 
-- **Mental Health Support:** Destigmatizes issues, promotes help-seeking.
-- **Improved Quality:** Personalized care, streamlined processes.
-- **Preventive Care:** Promotes proactive health management.
-- **Crisis Response:** Immediate support during emergencies.
+-  *Reduces Prescription Errors* – Minimizes misinterpretation of handwritten prescriptions, preventing medication-related mistakes.  
+-  *Improves Patient Safety* – Ensures accurate dosage instructions and identifies potential drug interactions.  
+-  *Enhances Medication Adherence* – Sends automated reminders, helping patients take medicines on time.  
+-  *Increases Pharmacy Efficiency* – Automates repetitive tasks, allowing pharmacists to focus on patient care.  
+-  *Improves Healthcare Accessibility* – Enables patients to check medicine availability and order remotely.  
+-  *Reduces Healthcare Costs* – Prevents medication waste and optimizes stock management, lowering expenses.  
+-  *Supports Underserved Areas* – Provides digital pharmacy solutions in areas with limited medical access.  
+-  *Strengthens Data-Driven Healthcare* – Uses AI to improve prescription tracking and healthcare insights.  
+-  *Empowers Patients with Information* – AI chatbot educates users about their medications, improving health awareness.  
+-  *Contributes to a Smarter Healthcare System* – Integrates AI and automation to make pharmacies safer and more efficient.
 
 
 
