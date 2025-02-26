@@ -37,15 +37,15 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 </div>
 <div align="center">
     <img src="Screenshots/Screenshot (357).png" alt="Priscription analysis" width="380" height="225">
-    <img src="Screenshots/Screenshot (358).png" alt="" width="380" height="225">
+    <img src="Screenshots/Screenshot (358).png" alt="Medication stock" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (358).png" alt="Mind-Bot" width="380" height="225">
-    <img src="Screenshots/Screenshot (359).png" alt="Mind-Bot Response" width="380" height="225">
+    <img src="Screenshots/Screenshot (358).png" alt="MedBot" width="380" height="225">
+    <img src="Screenshots/Screenshot (359).png" alt="Mediclock" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (360).png" alt="Consult Doctor" width="380" height="225">
-    <img src="Screenshots/Screenshot (361).png" alt="Doctor Appointment" width="380" height="225">
+    <img src="Screenshots/Screenshot (360).png" alt="remainder" width="380" height="225">
+    <img src="Screenshots/Screenshot (361).png" alt="" width="380" height="225">
 </div>
 <div align="center">
     <img src="Screenshots/Screenshot (362).png" alt="Consult Doctor" width="180" height="225">
