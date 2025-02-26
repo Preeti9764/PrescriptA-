@@ -111,7 +111,7 @@ I divided the dataset into X (60 columns) and Y (1 column) and applied an 80:20 
    
 5. Install Python dependencies by running:
    ```
-   pip install -r requirements.txt
+  pip install streamlit requests pillow pdf2image smtplib schedule pandas
    ```
 6. Run the development server using:
    ```
