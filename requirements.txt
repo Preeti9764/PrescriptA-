@@ -1,0 +1,14 @@
+streamlit
+random
+base64
+requests
+Pillow
+pdf2image
+smtplib
+schedule
+threading
+json
+re
+pandas
+io
+datetime
