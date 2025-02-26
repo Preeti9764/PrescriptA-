@@ -75,9 +75,9 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 - This **AI-driven chatbot**, powered by **Gemini AI**, provides **instant responses** to **pharmacist and patient queries** regarding **dosage, side effects, drug interactions, and medicine instructions**.  
 - Initially designed for **limited concurrent users**, the system will scale using **cloud-based AI models, SQL/NoSQL databases, and server load balancing**. Future enhancements include **local AI models for cost efficiency**.
 
-### Data Set Desciption
+### Sample Prototype (Prescription)
 
-After searching online, I discovered a Kaggle dataset that fits our 'Symptom Analysis' recommendation system. The dataset comprises 133 columns: 132 for patient symptoms and 1 for prognosis. It covers 42 different diseases and illnesses. The 'training.csv' file contains a total of 4,920 rows.
+I got a sample prescription from google as mock data since I can't get access to real patient data due to ethical reasons. I used the prescription to test my project's functionality. Below is the data sample I used : 
 
 ### Machine Learning Lifecycle
 
