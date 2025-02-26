@@ -112,10 +112,12 @@ I divided the dataset into X (60 columns) and Y (1 column) and applied an 80:20 
    ```
    pip install -r requirements.txt
    ```
-6. Run the development server using:
+3. Run Your Streamlit App
+   Navigate to main directory where app.py is located and run:
    ```
-   flask run
+   streamlit run app.py
    ```
+   
 7. Access the API at `http://localhost:5000/predict`.
    - Method: POST
    - Content-Type: Application/JSON
