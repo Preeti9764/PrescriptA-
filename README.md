@@ -133,6 +133,7 @@ I got a sample prescription from google as mock data since I can't get access to
 
 ### Social Impact of Priscripta
 
+
 -  **Reduces Prescription Errors** – Prevent deaths and healthcare complications due to misinterpretation of Prescription
 -  **Improve Medicine Accessibility** – Ensures proper management of Database increasing accessibility of Medicines in healthcare sector also enabling patients to check medicine availability and order remotely
 -  **Enhances Medication Adherence** – Sends automated reminders, helping patients escpecially older patients with lack of personal care to take medicines on time.  
