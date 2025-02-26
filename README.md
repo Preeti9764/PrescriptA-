@@ -125,10 +125,8 @@ I got a sample prescription from google as mock data since I can't get access to
 -  **AI Chatbot Assistance** – Answers **medicine-related queries** for **pharmacists and patients**.  
 -  **Medication Ordering & Billing** – Generates **orders and bills** directly from **prescriptions**.  
 -  **Patient Medicine Availability Check** – Allows users to **check stock** before visiting a **pharmacy**.  
--  **Online Medicine Ordering** – Enables **patients** to place **orders** through the **patient interface**.  
--  **Drug Interaction & Dosage Analysis** – Identifies **potential risks** and provides **accurate dosage information**.  
--  **Automated Medication Reminders** – Sends **alerts via MediClock** to improve **patient adherence**.  
--  **Insurance & Prescription Validation** – Helps process **insurance claims** by **validating prescriptions**.  
+-  **Online Medicine Ordering** – Enables **patients** to place **orders** through the **patient interface**.
+-  **Automated Medication Reminders** – Sends **alerts via MediClock** to improve **patient adherence**. 
 -  **Hospital & Clinic Integration** – Streamlines **medication management** within **healthcare facilities**.  
 
 
