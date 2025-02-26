@@ -107,11 +107,10 @@ I divided the dataset into X (60 columns) and Y (1 column) and applied an 80:20 
    - Python (version 3.x)
    - pip (Python package installer)
    - Virtual environment (optional but recommended)
-     
-   
-5. Install Python dependencies by running:
+      
+2.  Install Python dependencies by running:
    ```
-  pip install streamlit requests pillow pdf2image smtplib schedule pandas
+   pip install -r requirements.txt
    ```
 6. Run the development server using:
    ```
