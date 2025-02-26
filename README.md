@@ -8,7 +8,8 @@
                          
 Priscripta is an AI-driven Project designed to enhance pharmacy operations, reducing errors and improving efficiency .This is a project designed for google girl hackathon 2025 which uses the advanced technologies of Machine learning and Generative Ai to read the handwritten priscriptions given by the doctor.The aim of this project is to optimizes prescription handling, enhances patient safety, and streamlines pharmacy management—making healthcare smarter, faster, and more reliable.
 
-# Key features :                                                          
+# Key features :                                         
+                                              <br>
                                               <p align="center">
                                       <img src="Screenshots/image.pris.jpg" alt="Key Features" width="150" height="150">
                                                 </p>
