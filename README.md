@@ -131,7 +131,7 @@ I got a sample prescription from google as mock data since I can't get access to
 -  **Hospital & Clinic Integration** – Streamlines **medication management** within **healthcare facilities**.  
 
 
-### Social Impact of Priscripta
+### Social Impact of PriscriptA
 
 
 -  **Reduces Prescription Errors** – Prevent deaths and healthcare complications due to misinterpretation of Prescription
