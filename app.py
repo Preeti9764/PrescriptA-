@@ -18,7 +18,7 @@ import io
 from datetime import datetime
 
 # Configuration - Replace with your API key
-GEMINI_API_KEY = "AIzaSyC56Rakq6bf6hCPTwExkwctgU2kSfVjPEo"
+GEMINI_API_KEY = "AIzaSyAXbWZl8H5qyqXtqi5Be1G6xyfJW3ES__A"
 GEMINI_MODEL = "gemini-2.0-flash"  # For document processing
 GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
 
