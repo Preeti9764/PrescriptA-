@@ -85,7 +85,7 @@ I got a sample prescription from google as mock data since I can't get access to
 ### Project Flow
 
 <p align="center">
-    <img src="Screenshots/projectflow.jpg" alt="ML Lifecycle" width="600" height="379">
+    <img src="Screenshots/projectflow.jpg" alt="ML Lifecycle" width="600" height="500">
 </p>
 
 The machine learning cycle in this process starts with a user uploading a prescription, which undergoes file type classification. If the file is a PDF, it is first converted into an image before being encoded in Base64 format. The system then performs document type classification to determine if it is a valid prescription. Once classified, prescription data extraction is carried out using Optical Character Recognition (OCR) and Natural Language Processing (NLP) techniques to retrieve relevant medical information. The extracted data is then analyzed to generate a structured medication order.
