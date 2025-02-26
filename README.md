@@ -138,19 +138,11 @@ I got a sample prescription from google as mock data since I can't get access to
 
 ### *Social Impact of Priscripta*  
 
--  *Reduces Prescription Errors* – Minimizes misinterpretation of handwritten prescriptions, preventing medication-related mistakes.  
--  *Improves Patient Safety* – Ensures accurate dosage instructions and identifies potential drug interactions.  
--  *Enhances Medication Adherence* – Sends automated reminders, helping patients take medicines on time.  
--  *Increases Pharmacy Efficiency* – Automates repetitive tasks, allowing pharmacists to focus on patient care.  
--  *Improves Healthcare Accessibility* – Enables patients to check medicine availability and order remotely.  
--  *Reduces Healthcare Costs* – Prevents medication waste and optimizes stock management, lowering expenses.  
--  *Supports Underserved Areas* – Provides digital pharmacy solutions in areas with limited medical access.  
--  *Strengthens Data-Driven Healthcare* – Uses AI to improve prescription tracking and healthcare insights.  
--  *Empowers Patients with Information* – AI chatbot educates users about their medications, improving health awareness.  
--  *Contributes to a Smarter Healthcare System* – Integrates AI and automation to make pharmacies safer and more efficient.
-
-
-
+-  **Reduces Prescription Errors** – Prevent deaths and healthcare complications due to misinterpretation of Prescription
+-  **Improve Medicine Accessibility** – Ensures proper management of Database increasing accessibility of Medicines in healthcare sector also enabling patients to check medicine availability and order remotely
+-  **Enhances Medication Adherence** – Sends automated reminders, helping patients escpecially older patients with lack of personal care to take medicines on time.  
+-  **Increases Pharmacy Efficiency** – Automates repetitive tasks such as prescription analysis , billing orders and database management allowing pharmacists to focus on patient care. 
+-  **Reduces Healthcare Costs** – Prevents medication waste and optimizes stock management, lowering expenses.  
 
 ## Scopes of Improvement
 
