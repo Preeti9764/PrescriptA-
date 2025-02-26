@@ -2,7 +2,7 @@
                     
  <br>
   <p align="center">
-    <img src="Screenshots/Priscripta.logo.png" alt="PriscriptA" width="170" height="80">
+    <img src="Screenshots/Priscripta.logo.png" alt="PriscriptA" width="170" height="150">
   </p>
 
                          
