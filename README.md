@@ -19,7 +19,7 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ✅ **Prescription Reader** – A Python-based AI model that accurately reads and analyzes handwritten prescriptions, minimizing human errors.
 
-🤖 **PharmBot** – An intelligent chatbot that assists pharmacists and patients by answering queries about prescribed medicines, dosages, and potential interactions.
+🤖 **MedBot** – An intelligent chatbot that assists pharmacists and patients by answering queries about prescribed medicines, dosages, and potential interactions.
 
 📦 **Medication Database** – A structured inventory system that tracks medicine availability in real time, ensuring stock is managed effectively.
 
