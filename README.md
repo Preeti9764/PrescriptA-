@@ -67,7 +67,7 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ### Architecture
 <p align="center">
-    <img src="screenshots/architecture.jpg" alt="Architecture"  width="600" height="329">
+    <img src="Screenshots/flowchart.PrescriptA.jpg" alt="Architecture"  width="600" height="329">
 </p>
 
 HealSmart offers a comprehensive healthcare solution by leveraging modern technologies and user-friendly design principles. The architecture is built around three main divisions:
