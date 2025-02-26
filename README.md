@@ -82,17 +82,17 @@ I got a sample prescription from google as mock data since I can't get access to
 <img src="Screenshots/priscription.dummy.jpg" width="400" height="300">
 </p>
 
-### Machine Learning Lifecycle
+### Project Flow
 
 <p align="center">
-    <img src="screenshots/projectflow.jpeg" alt="ML Lifecycle" width="600" height="379">
+    <img src="Screenshots/projectflow.jpg" alt="ML Lifecycle" width="600" height="379">
 </p>
 
-The machine learning lifecycle begins with exploratory data analysis (EDA). The dataset, consisting of 132 columns of categorical data (0 or 1), covered 42 diseases, each with 120 balanced samples. We ensured data consistency, corrected naming inconsistencies, and focused on 12 diseases for prototyping.
+The machine learning cycle in this process starts with a user uploading a prescription, which undergoes file type classification. If the file is a PDF, it is first converted into an image before being encoded in Base64 format. The system then performs document type classification to determine if it is a valid prescription. Once classified, prescription data extraction is carried out using Optical Character Recognition (OCR) and Natural Language Processing (NLP) techniques to retrieve relevant medical information. The extracted data is then analyzed to generate a structured medication order.
 
-Utilizing techniques like Tree-based Algorithm for Feature Importance, Recursive Feature Elimination (RFE), and L1 Regularization (Lasso), I reduced features to 60 for simplicity. After excluding irrelevant rows and introducing a new class for uncorrelated symptoms, the dataset contained 1,560 rows and 61 columns.
+Next, the medication order is matched against a predefined medication database to verify availability and accuracy. If a match is found, the pharmacy stock is updated accordingly. The processed orders are then displayed for review, after which they can be exported to a CSV file for further processing or record-keeping.
 
-I divided the dataset into X (60 columns) and Y (1 column) and applied an 80:20 train-test split, stratified to maintain equal class representation. Using Logistic Regression from sklearn, my model achieved a 99% validation accuracy, effectively addressing the multi-class classification problem.
+In parallel, the system also provides additional functionalities such as handling chat queries by responding to user questions and setting up medicine reminders. The reminders are scheduled and sent to users via email notifications, ensuring adherence to prescribed medication schedules. Through this structured pipeline, the system integrates machine learning techniques with practical healthcare applications, streamlining prescription processing and medication management efficiently.
 
 
 
