@@ -118,18 +118,6 @@ In parallel, the system also provides additional functionalities such as handlin
    streamlit run app.py
    ```
    
-7. Access the API at `http://localhost:5000/predict`.
-   - Method: POST
-   - Content-Type: Application/JSON
-   - Sample Body:
-     ```json
-     { "symptoms": ["hip_joint_pain", "joint_pain", "knee_pain", "painful_walking"]}
-     ```
-   - Sample Response:
-     ```json
-     {"prediction": "Osteoarthritis"}
-     ```
-
 
 ## Use Cases
 
