@@ -1,5 +1,4 @@
 import streamlit as st
-import random
 import base64
 import requests
 from PIL import Image
@@ -16,11 +15,114 @@ import re
 import pandas as pd
 import io
 from datetime import datetime
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+import pandas as pd
+
+
+# Check if Firebase is already initialized
+if not firebase_admin._apps:
+    cred = credentials.Certificate("C:\prescripta\prescripta-34da5-firebase-adminsdk-fbsvc-60860691f7.json")  # Use the correct path
+    firebase_admin.initialize_app(cred)
+
+# Initialize Firestore
+db = firestore.client()
+
+def fetch_all_medicines():
+    """Fetch all medicines from Firestore and return as a Pandas DataFrame."""
+    medications = db.collection("medications").stream()
+
+    data = []
+    for med in medications:
+        med_dict = med.to_dict()
+        data.append(med_dict)
+
+    # Convert to Pandas DataFrame
+    if data:
+        return pd.DataFrame(data)
+    else:
+        return pd.DataFrame(columns=["name", "brand", "price", "stock"])  # Ensure no error if DB is empty
+
 
 # Configuration - Replace with your API key
-GEMINI_API_KEY = "AIzaSyAXbWZl8H5qyqXtqi5Be1G6xyfJW3ES__A"
+GEMINI_API_KEY = "AIzaSyC56Rakq6bf6hCPTwExkwctgU2kSfVjPEo"
 GEMINI_MODEL = "gemini-2.0-flash"  # For document processing
 GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
+
+
+def check_medicine_exists(med_name):
+    """Check if a medicine exists in Firestore and return its details."""
+    doc_ref = db.collection("medications").document(med_name.lower())
+    doc = doc_ref.get()
+    return doc.to_dict() if doc.exists else None
+
+def place_order(order_list):
+    """Place an order and reduce stock in Firestore."""
+    if not order_list:
+        st.warning("Order is empty. Please add medicines first!")
+        return
+
+    for item in order_list:
+        med_name = item["name"]
+        quantity = item["quantity"]
+        
+        # Fetch medicine details again to ensure stock is updated
+        med_details = check_medicine_exists(med_name)
+        if med_details and med_details["stock"] >= quantity:
+            # ✅ Reduce stock in Firestore
+            new_stock = med_details["stock"] - quantity
+            db.collection("medications").document(med_name.lower()).update({"stock": new_stock})
+        else:
+            st.error(f"Not enough stock for {med_name}. Only {med_details['stock']} available!")
+            return  # Stop order if any item is out of stock
+
+    # ✅ Clear order after placing
+    st.session_state.order_list = []
+    st.success("Order placed successfully! ✅")
+
+
+def add_medicine(name, brand, price, stock):
+    """Add a new medicine to Firestore."""
+    doc_ref = db.collection("medications").document(name.lower())
+    doc_ref.set({
+        "name": name,
+        "brand": brand,
+        "price": price,
+        "stock": stock
+    })
+
+def search_medication(query):
+    """Search for a medication in Firestore by name (partial match)."""
+    query = query.lower().strip()
+
+    # Ensure we are querying the "medications" collection
+    medications_ref = db.collection("medications")
+    
+    medications = medications_ref.order_by("name").start_at([query]).end_at([query + "\uf8ff"]).stream()
+    
+    results = []
+    for med in medications:
+        data = med.to_dict()
+        results.append({
+            "name": data["name"],
+            "brand": data["brand"],
+            "price": data["price"],
+            "stock": data["stock"]
+        })
+    
+    return results
+
+def remove_medicine(med_name):
+    """Remove a medicine from Firestore."""
+    try:
+        db.collection("medications").document(med_name.lower()).delete()
+        st.success(f"{med_name} removed from stock!")
+        st.experimental_rerun()  # Refresh UI after deletion
+    except Exception as e:
+        st.error(f"Error removing medicine: {e}")
+
+
 
 # Pharmacy-specific document types
 DOCUMENT_TYPES = [
@@ -36,40 +138,37 @@ DOCUMENT_TYPES = [
     "Others"
 ]
 
-# Common medications database - with added medications
+# Common medications database - would be replaced with a real database
 MEDICATION_DATABASE = {
+    "lisinopril": {
+        "dosages": ["5mg", "10mg", "20mg", "40mg"],
+        "forms": ["tablet"],
+        "instructions": ["Take once daily", "Take with or without food"],
+        "interactions": ["potassium supplements", "spironolactone"],
+        "category": "ACE inhibitor"
+    },
+    "metformin": {
+        "dosages": ["500mg", "850mg", "1000mg"],
+        "forms": ["tablet", "extended-release"],
+        "instructions": ["Take with meals", "Swallow whole if extended-release"],
+        "interactions": ["alcohol", "contrast dyes"],
+        "category": "Antidiabetic"
+    },
+    "atorvastatin": {
+        "dosages": ["10mg", "20mg", "40mg", "80mg"],
+        "forms": ["tablet"],
+        "instructions": ["Take at bedtime", "Avoid grapefruit"],
+        "interactions": ["clarithromycin", "itraconazole"],
+        "category": "Statin"
+    },
     "augmentin": {
-        "dosages": ["625mg"],
-        "forms": ["tablet"],
-        "instructions": ["Take twice a day after meals"],
-        "interactions": ["alcohol", "probenecid"],
-        "category": "Antibiotic"
-    },
-    "enzoflam": {
-        "dosages": ["tablet"],
-        "forms": ["tablet"],
-        "instructions": ["Take twice daily (morning and night) after meals for 5 days"],
-        "interactions": ["alcohol", "NSAIDs"],
-        "category": "Analgesic/Anti-inflammatory"
-    },
-    "pan-d": {
-        "dosages": ["40mg"],
-        "forms": ["tablet"],
-        "instructions": ["Take once daily (morning) before meals for 5 days"],
-        "interactions": ["ketoconazole", "atazanavir"],
-        "category": "Proton Pump Inhibitor + Prokinetic"
-    },
-    "hexigel": {
-        "dosages": ["gum paint"],
-        "forms": ["gel"],
-        "instructions": ["Massage twice daily (morning and night) for 1 week"],
-        "interactions": ["none known"],
-        "category": "Oral Antiseptic"
-    }
+    "dosages": ["250mg", "500mg", "625mg", "1g"],
+    "forms": ["tablet", "oral suspension"],
+    "instructions": ["Take with food", "Complete the full course"],
+    "interactions": ["alcohol", "probenecid"],
+    "category": "Antibiotic"
 }
-
-# Initialize random pharmacy stock with the new medications
-PHARMACY_STOCK = {med: {"available": random.randint(10, 100), "threshold": random.randint(1, 10)} for med in MEDICATION_DATABASE}
+}
 
 # Initialize session state
 def initialize_session_state():
@@ -154,10 +253,15 @@ def process_prescription():
         extraction_prompt = """
         Extract the following information from this prescription:
         1. Patient Name
-        2. Medication Name(s)
-        3. Dosage(s)
-        4. Instructions
-        5. Quantity
+        2. Patient Date of Birth or Age
+        3. Patient ID (if available)
+        4. Doctor Name
+        5. Date of Prescription
+        6. Medication Name(s)
+        7. Dosage(s)
+        8. Instructions
+        9. Quantity
+        10. Refills
         
         Format the response as a JSON object with these fields. If information is not available, use null.
         """
@@ -168,7 +272,7 @@ def process_prescription():
         # Process the extraction to ensure it's valid JSON
         try:
             # Extract the JSON part if the response contains explanatory text
-            json_match = re.search(r"```json\n(.*?)\n```", prescription_raw, re.DOTALL)
+            json_match = re.search(r'```json\n(.*?)\n```', prescription_raw, re.DOTALL)
             if json_match:
                 prescription_json = json_match.group(1)
             else:
@@ -179,10 +283,11 @@ def process_prescription():
             # Create a simplified summary for display
             if isinstance(prescription_data, dict):
                 summary = f"**Patient**: {prescription_data.get('Patient Name', 'Unknown')}\n"
-                summary += f"**Medications**: {prescription_data.get('Medication Name(s)', 'Unknown')}\n"
+                summary += f"**Medication**: {prescription_data.get('Medication Name(s)', 'Unknown')}\n"
                 summary += f"**Dosage**: {prescription_data.get('Dosage(s)', 'Unknown')}\n"
                 summary += f"**Instructions**: {prescription_data.get('Instructions', 'Unknown')}\n"
-                summary += f"**Quantity**: {prescription_data.get('Quantity', 'Unknown')}"
+                summary += f"**Quantity**: {prescription_data.get('Quantity', 'Unknown')}\n"
+                summary += f"**Refills**: {prescription_data.get('Refills', 'Unknown')}"
             else:
                 summary = "Could not parse prescription data correctly."
                 prescription_data = {}
@@ -206,7 +311,7 @@ def process_prescription():
 
 # Create a medication order from prescription
 def create_medication_order():
-    """"Create a medication order from prescription data."""
+    """Create a medication order from prescription data."""
     if not st.session_state.prescription_data:
         st.error("No prescription data available. Please upload a prescription first.")
         return
@@ -263,7 +368,7 @@ def handle_chat_query():
     
     # Determine query type and context
     if st.session_state.processed_doc and any(keyword in user_input.lower() for keyword in 
-                                               ["prescription", "ocument", "edicine", "osage", "atient", "this"]):
+                                           ["prescription", "document", "medicine", "dosage", "patient", "this"]):
         # Query related to the uploaded document
         prompt = f"""
         Context: You are a pharmacist assistant.
@@ -294,8 +399,8 @@ def handle_chat_query():
 def send_email_reminder(email, message):
     """Send an email reminder."""
     try:
-        sender_email = "prishitashukla@gmail.com"  # Replace with actual email
-        sender_password = "Prishita#8932"  # Replace with actual password
+        sender_email = "pharmacyreminder@example.com"  # Replace with actual email
+        sender_password = "password"  # Replace with actual password
 
         msg = MIMEMultipart()
         msg["From"], msg["To"], msg["Subject"] = sender_email, email, "Medication Reminder"
@@ -351,135 +456,6 @@ def search_medication(query):
     
     return results
 
-# Improved check stock function
-def check_stock(medication, quantity):
-    """Check if the medication is in stock with improved matching."""
-    # Normalize medication name for better matching
-    if isinstance(medication, list):
-        medication = ' '.join(medication)  # Convert list to string if it's a list
-    med_name = medication.lower()
-    
-    # Try direct match first
-    if med_name in PHARMACY_STOCK:
-        stock_info = PHARMACY_STOCK[med_name]
-        if stock_info["available"] >= int(quantity):
-            return "Stock Available"
-        elif stock_info["available"] > 0:
-            return "Stock Low - Order Needed"
-        else:
-            return "Out of Stock"
-    
-    # Try partial match if direct match fails
-    for stock_med in PHARMACY_STOCK:
-        if stock_med in med_name or med_name in stock_med:
-            stock_info = PHARMACY_STOCK[stock_med]
-            if stock_info["available"] >= int(quantity):
-                return f"Stock Available (matched with {stock_med})"
-            elif stock_info["available"] > 0:
-                return f"Stock Low - Order Needed (matched with {stock_med})"
-            else:
-                return f"Out of Stock (matched with {stock_med})"
-    
-    return "Medication not found in inventory"
-
-# Improved order generation function
-def generate_order(medication, quantity):
-    """Generate a medication order with improved matching and error handling."""
-    if not medication:
-        return "No medication specified"
-    
-    try:
-        quantity = int(quantity) if quantity and str(quantity).isdigit() else 1
-    except (ValueError, TypeError):
-        quantity = 1
-    
-    # Normalize medication name
-    if isinstance(medication, list):
-        medication = ' '.join(medication)  # Convert list to string if it's a list
-    med_name = medication.lower()
-    matched_med = None
-    
-    # Try direct match first
-    if med_name in PHARMACY_STOCK:
-        matched_med = med_name
-    else:
-        # Try partial match if direct match fails
-        for stock_med in PHARMACY_STOCK:
-            if stock_med in med_name or med_name in stock_med:
-                matched_med = stock_med
-                break
-    
-    if matched_med:
-        stock_info = PHARMACY_STOCK[matched_med]
-        
-        # Create appropriate order based on stock
-        if stock_info["available"] >= quantity:
-            order = {
-                "medication": medication,
-                "matched_medication": matched_med,
-                "quantity": quantity,
-                "status": "Order Created - In Stock",
-                "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            st.session_state.patient_orders.append(order)
-            return f"Order successfully placed for {medication}. Stock available."
-            
-        elif stock_info["available"] > 0:
-            order = {
-                "medication": medication,
-                "matched_medication": matched_med,
-                "quantity": quantity,
-                "status": "Order Created - Partial Stock",
-                "available": stock_info["available"],
-                "backordered": quantity - stock_info["available"],
-                "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            st.session_state.patient_orders.append(order)
-            
-            # Create supplier order for restocking
-            supplier_order = {
-                "medication": matched_med,
-                "quantity": max(50, quantity * 2),  # Order restock in bulk
-                "status": "Supplier Order Created",
-                "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            st.session_state.patient_orders.append(supplier_order)
-            
-            return f"Partial stock available ({stock_info['available']} units). Order placed for all {quantity} units with remaining on backorder. Supplier order created."
-            
-        else:
-            order = {
-                "medication": medication,
-                "matched_medication": matched_med,
-                "quantity": quantity,
-                "status": "Order Created - Out of Stock",
-                "backordered": quantity,
-                "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            st.session_state.patient_orders.append(order)
-            
-            # Create supplier order
-            supplier_order = {
-                "medication": matched_med,
-                "quantity": max(50, quantity * 2),  # Order restock in bulk
-                "status": "Supplier Order Created - URGENT",
-                "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            st.session_state.patient_orders.append(supplier_order)
-            
-            return f"Medication out of stock. Order placed with {quantity} units on backorder. Urgent supplier order created."
-    else:
-        # Add a special order for medications not in the database
-        order = {
-            "medication": medication,
-            "quantity": quantity,
-            "status": "Special Order - Not in Regular Inventory",
-            "order_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-        st.session_state.patient_orders.append(order)
-        
-        return f"Medication '{medication}' not found in regular inventory. Special order created."
-
 # Export orders to CSV
 def export_orders_to_csv():
     """Export all patient orders to a CSV file."""
@@ -492,7 +468,11 @@ def export_orders_to_csv():
     return csv
 
 # UI Layout
+
+
 def main():
+    st.set_page_config(page_title="Pharmacist's Assistant", layout="wide")
+    
     # Apply custom CSS for background and styling
     st.markdown("""
         <style>
@@ -519,7 +499,7 @@ def main():
             }
             .title-text {
                 text-align: center;
-                color: black;
+                color: dark blue;
                 font-size: 48px;
                 font-weight: bold;
             }
@@ -528,11 +508,11 @@ def main():
     
     initialize_session_state()
 
-    st.markdown("<div class='title-text'>PrescriptA💊</div>", unsafe_allow_html=True)
+    st.markdown("<div class='title-text'>PrescriptA</div>", unsafe_allow_html=True)
 
     # Sidebar for chat functionality
     with st.sidebar:
-        st.header("MedBot⛑")
+        st.header("PharmBot")
         for role, message in st.session_state.chat_history:
             with st.chat_message(role):
                 st.markdown(message)
@@ -570,67 +550,97 @@ def main():
             if st.session_state.doc_preview:
                 st.subheader("Prescription Preview")
                 st.image(st.session_state.doc_preview, use_container_width=True)
-    
-    with tab2:
-        st.subheader("Medication Database")
-        search_query = st.text_input("Search Medications")
-        if search_query:
-            results = search_medication(search_query)
-            if results:
-                st.write(f"Found {len(results)} medications:")
-                for med in results:
-                    with st.expander(f"{med['name']} ({med['category']})"):
-                        st.write(f"**Available Dosages**: {med['dosages']}")
-                        st.write(f"**Forms**: {med['forms']}")
-                        info_prompt = f"Provide a brief professional summary of {med['name']} including its primary uses, major side effects, and important counseling points for pharmacists."
-                        med_info = query_gemini(info_prompt, model=GEMINI_PRO_MODEL)
-                        st.markdown(med_info)
-            else:
-                st.info("No medications found. Try a different search term.")
-        # Display medication stock
-        st.write("### Medication Stock")
-        for med, stock in PHARMACY_STOCK.items():
-            st.write(f"**{med}**: {stock['available']} units available")
-    with tab3:
-       st.subheader("Orders")
-    
-    # Display existing orders
-    st.write("### Current Orders")
-    if st.session_state.patient_orders:
-        # Create a DataFrame to hold order details
-        orders_df = pd.DataFrame(st.session_state.patient_orders)
-        
-        # Add random prices to the DataFrame
-        orders_df['price'] = [random.randint(150,500) for _ in range(len(orders_df))]
-        
-        # Calculate total amount for each order
-        orders_df['total_amount'] = orders_df['quantity'] * orders_df['price']
-        
-        # Display the DataFrame as a table
-        st.write(orders_df[['medication', 'quantity', 'price', 'total_amount']])
-        
-        # Display the total amount for all orders
-        total_amount = orders_df['total_amount'].sum()
-        st.write(f"**Total Amount for All Orders:** ${total_amount:.2f}")
-        
-        if st.button("Export Orders to CSV"):
-            csv = export_orders_to_csv()
-            if csv:
-                st.download_button(
-                    "Download CSV",
-                    csv,
-                    "pharmacy_orders.csv",
-                    "text/csv",
-                    key="download-csv"
-                )
-    else:
-        st.info("No orders have been created yet.")
-        
-        # Display medication stock
-        # st.write("### Medication Stock")
-        # for med, stock in PHARMACY_STOCK.items():
-        #     st.write(f"**{med}**: {stock['available']} units available")
 
+    with tab2:
+        st.subheader("📋 Medication Database")
+
+        # ✅ Fetch data from Firestore
+        df = fetch_all_medicines()
+
+        # ✅ Ensure df is always a DataFrame
+        if df is None or df.empty:
+            df = pd.DataFrame(columns=["name", "brand", "price", "stock"])
+            st.info("No medicines available in the database.")
+
+        # ✅ "Add New Medicine" Section (Always Visible)
+        with st.expander("➕ Add New Medicine"):
+            med_name = st.text_input("Medicine Name")
+            med_brand = st.text_input("Brand Name")
+            med_price = st.number_input("Price per unit", min_value=0.0, step=0.1)
+            med_stock = st.number_input("Stock Available", min_value=0, step=1)
+
+            if st.button("Add Medicine"):
+                add_medicine(med_name, med_brand, med_price, med_stock)
+
+        # ✅ Search Bar (Filters Table)
+        search_query = st.text_input("🔍 Search Medications", placeholder="Enter medicine name...")
+
+        if not df.empty and search_query:
+            df = df[df["name"].str.contains(search_query, case=False, na=False)]
+
+        # ✅ Display Table with Streamlit Buttons for Deletion
+        if not df.empty:
+            st.write("### Medicine Stock")
+            for index, row in df.iterrows():
+                col1, col2, col3, col4, col5 = st.columns([3, 3, 2, 2, 1])  # Adjust column sizes
+                col1.write(f"**{row['name']}**")
+                col2.write(row["brand"])
+                col3.write(f"₹{row['price']:.2f}")
+                col4.write(f"{row['stock']} units")
+
+                # ✅ Fix: Use Streamlit Button Instead of HTML
+                if col5.button("🗑️", key=f"del_{row['name']}"):
+                    remove_medicine(row["name"])
+
+        else:
+            st.info("No medicines available in the database.")
+
+ 
+    with tab3:
+        st.subheader("🛒 Orders")
+
+        # ✅ Initialize order list in session state if not exists
+        if "order_list" not in st.session_state:
+            st.session_state.order_list = []
+
+        # ✅ Medicine Selection Inputs
+        med_name = st.text_input("Enter Medicine Name")
+        med_quantity = st.number_input("Enter Quantity", min_value=1, step=1)
+
+        if st.button("➕ Add to Order"):
+            med_details = check_medicine_exists(med_name)
+
+            if med_details:
+                if med_quantity <= med_details["stock"]:
+                    # ✅ Add to session state order list
+                    st.session_state.order_list.append({
+                        "name": med_name,
+                        "quantity": med_quantity,
+                        "price": med_details["price"] * med_quantity
+                    })
+                    st.success(f"{med_quantity} units of {med_name} added to order! ✅")
+                else:
+                    st.error(f"Only {med_details['stock']} units available!")
+            else:
+                st.error("Medicine not found in stock!")
+
+        # ✅ Display Order Summary
+        if st.session_state.order_list:
+            st.write("### 📝 Order Summary")
+            total_price = sum(item["price"] for item in st.session_state.order_list)
+
+            # ✅ Display Table
+            order_df = pd.DataFrame(st.session_state.order_list)
+            st.dataframe(order_df, use_container_width=True)
+
+            # ✅ Place Order Button
+            if st.button("✅ Place Order"):
+                place_order(st.session_state.order_list)
+
+        else:
+            st.info("No items in the order. Add medicines to order!")
+
+    
     with tab4:
         st.subheader("MediClock")
         with st.form("reminder_form"):
@@ -645,7 +655,6 @@ def main():
                 success = schedule_reminder(patient_email, time_str, reminder_msg, medication)
                 if success:
                     st.success("Reminder scheduled successfully!")
-
 
 if __name__ == "__main__":
     main()
