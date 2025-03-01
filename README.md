@@ -77,9 +77,10 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ### Sample Prototype (Prescription)
 
-I got a sample prescription from google as mock data since I can't get access to real patient data due to ethical reasons. I used the prescription to test my project's functionality. Below is the data sample I used :
+I got a sample prescription from google as mock data since I can't get access to real patient data due to ethical reasons. I used the prescription to test my project's functionality. Below is the data samples I used :
 <p align ="center">
-<img src="Screenshots/priscription.dummy.jpg" width="400" height="300">
+<img src="Screenshots/priscriptiondummy2.jpg" width="400" height="300">
+  <img src="Screenshots/priscription.dummy.jpg" width="400" height="300">
 </p>
 
 ### Project Flow
