@@ -98,26 +98,39 @@ I got a sample prescription from google as mock data since I can't get access to
 
 ## Getting Started
 
-
-
 ### Setting up the ML Model API locally
 
 1. Make sure you have the following installed:
    - Python (version 3.x)
    - pip (Python package installer)
    - Virtual environment (optional but recommended)
-   - preferred to use lightning ai for faster processing
+   - Preferred to use Lightning AI for faster processing
       
-2.  Install Python dependencies by running:
+2. Install Python dependencies by running:
    ```
    pip install -r requirements.txt
    ```
-3. Run Your Streamlit App
-   Navigate to main directory where app.py is located and run:
+
+3. **Set up Firebase Credentials**
+   - Ensure you have the correct Firebase Admin SDK JSON file.
+   - Update the Firebase initialization code with the correct path:
+     ```python
+     import firebase_admin
+     from firebase_admin import credentials
+     
+     # Check if Firebase is already initialized
+     if not firebase_admin._apps:
+         cred = credentials.Certificate("path/to/your/firebase-adminsdk.json")  # Update this path
+         firebase_admin.initialize_app(cred)
+     ```
+   - Replace `path/to/your/firebase-adminsdk.json` with the actual path to your Firebase credentials file.
+
+4. Run Your Streamlit App
+   Navigate to the main directory where `app.py` is located and run:
    ```
    streamlit run app.py
    ```
-   
+
 
 ## Use Cases
 
