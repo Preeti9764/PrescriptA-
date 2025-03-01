@@ -32,26 +32,26 @@ Priscripta is an AI-driven Project designed to enhance pharmacy operations, redu
 
 ### Screenshots
 <div align="center">
-    <img src="Screenshots/Screenshot (355).png" alt="Home Page" width="380" height="225">
-    <img src="Screenshots/Screenshot (356).png" alt="Priscription upload" width="380" height="225">
+    <img src="Screenshots/homePrescriptA.jpg" alt="Home Page" width="380" height="225">
+    <img src="Screenshots/uploadPrescriptA.jpg" alt="Priscription upload" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (357).png" alt="Priscription analysis" width="380" height="225">
-    <img src="Screenshots/Screenshot (358).png" alt="Medication stock" width="380" height="225">
+      <img src="Screenshots/analysisPriscriptA.jpg" alt="Medication stock" width="380" height="225">
+    <img src="Screenshots/MedBotPriscriptA.jpg" alt="Priscription analysis" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (358).png" alt="MedBot" width="380" height="225">
-    <img src="Screenshots/Screenshot (359).png" alt="Mediclock" width="380" height="225">
+    <img src="Screenshots/addMedicine.jpg" alt="MedBot" width="380" height="225">
+    <img src="Screenshots/dataBasePriscriptA.jpg" alt="Mediclock" width="380" height="225">
 </div>
 <div align="center">
-    <img src="Screenshots/Screenshot (360).png" alt="remainder" width="380" height="225">
-    <img src="Screenshots/Screenshot (361).png" alt="medbot" width="380" height="225">
+    <img src="Screenshots/OrdersPriscriptA.jpg" alt="remainder" width="380" height="225">
+    <img src="Screenshots/reminderPriiscriptA.jpg" alt="medbot" width="380" height="225">
 </div>
-<div align="center">
+<!-- <div align="center">
     <img src="Screenshots/Screenshot (362).png" alt="mediclock" width="180" height="225">
    <img src="Screenshots/Screenshot orders.png" alt="order" width="180" height="225">
     <img src="Screenshots/Screenshot (363).png" alt="overall" width="380" height="225">
-</div>
+</div> -->
 
 ## Technologies Used
 - **Frontend:** React JS, HTML,CSS
