@@ -2,10 +2,6 @@ streamlit
 pillow
 requests
 pdf2image
-smtplib
-email
 schedule
-json
 pandas
 firebase-admin
-datetime
