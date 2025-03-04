@@ -20,10 +20,12 @@ from firebase_admin import credentials, firestore
 
 import pandas as pd
 
+from datetime import datetime
 
 # Check if Firebase is already initialized
 if not firebase_admin._apps:
-    cred = credentials.Certificate("C:\prescripta\prescripta-34da5-firebase-adminsdk-fbsvc-60860691f7.json")  # Use the correct path
+    cred = credentials.Certificate(r"C:\prescripta\prescripta-34da5-firebase-adminsdk-fbsvc-47b8c531e7.json")
+  # Use the correct path
     firebase_admin.initialize_app(cred)
 
 # Initialize Firestore
@@ -122,6 +124,94 @@ def remove_medicine(med_name):
     except Exception as e:
         st.error(f"Error removing medicine: {e}")
 
+
+
+def save_order_to_firestore(order_list):
+    """Save the current order to Firestore."""
+    if not order_list:
+        return
+
+    order_ref = db.collection("orders").document("current_order")
+    order_ref.set({"items": order_list})
+
+def load_current_order():
+    """Load the saved order from Firestore (if exists)."""
+    order_ref = db.collection("orders").document("current_order").get()
+    if order_ref.exists:
+        return order_ref.to_dict().get("items", [])
+    return []
+
+def place_order():
+    """Finalize the order, reduce stock, and save the completed order."""
+    if not st.session_state.order_list:
+        st.warning("Order is empty! Please add medicines.")
+        return
+    
+    completed_order = {
+        "items": st.session_state.order_list,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    
+    # ✅ Save finalized order to Firestore
+    db.collection("completed_orders").add(completed_order)
+
+    for item in st.session_state.order_list:
+        med_name = item["name"]
+        quantity = item["quantity"]
+        med_details = check_medicine_exists(med_name)
+        
+        if med_details and med_details["stock"] >= quantity:
+            new_stock = med_details["stock"] - quantity
+            db.collection("medications").document(med_name.lower()).update({"stock": new_stock})
+        else:
+            st.error(f"Not enough stock for {med_name}! Only {med_details['stock']} available.")
+            return
+    
+    # ✅ Clear order from session and Firestore
+    st.session_state.order_list = []
+    db.collection("orders").document("current_order").delete()
+
+    st.success("Order placed successfully! ✅")
+
+def create_order_from_prescription():
+    """Convert prescription medicines into an order by searching in Firestore."""
+    if "prescription_data" not in st.session_state or not st.session_state.prescription_data:
+        st.error("No prescription data found! Please analyze a prescription first.")
+        return
+
+    prescription = st.session_state.prescription_data
+    medications = prescription.get("Medication Name(s)", [])
+
+    if not medications:
+        st.error("No medicines found in the prescription!")
+        return
+
+    if isinstance(medications, str):  # Convert single medicine to list
+        medications = [medications]
+
+    order_list = []
+    
+    for med_name in medications:
+        med_details = check_medicine_exists(med_name)
+        
+        if med_details:
+            order_list.append({
+                "name": med_name,
+                "quantity": 1,  # Default to 1, user can edit later
+                "price": med_details["price"]
+            })
+        else:
+            st.warning(f"{med_name} not found in stock! Skipping.")
+
+    if not order_list:
+        st.error("None of the prescribed medicines are available in stock.")
+        return
+    
+    # ✅ Save order in session state
+    st.session_state.order_list = order_list
+    save_order_to_firestore(order_list)  # Save in Firestore
+
+    st.success("✅ Order created from prescription successfully! Check the Orders tab.")
 
 
 # Pharmacy-specific document types
@@ -508,11 +598,11 @@ def main():
     
     initialize_session_state()
 
-    st.markdown("<div class='title-text'>PrescriptA</div>", unsafe_allow_html=True)
+    st.markdown("<div class='title-text'>PrescriptA💊</div>", unsafe_allow_html=True)
 
     # Sidebar for chat functionality
     with st.sidebar:
-        st.header("PharmBot")
+        st.header("MedBot🤖")
         for role, message in st.session_state.chat_history:
             with st.chat_message(role):
                 st.markdown(message)
@@ -525,14 +615,16 @@ def main():
         col1, col2 = st.columns([1, 1])
         
         with col1:
-            st.subheader("Upload & Prescription Analysis")
+            st.subheader("📤 Upload & Prescription Analysis")
             uploaded_file = st.file_uploader("Upload Prescription", type=["pdf", "png", "jpg", "jpeg"], key="uploaded_file", on_change=process_prescription)
             
             if st.session_state.processed_doc:
-                st.subheader("Analysis")
+                st.subheader("📑 Analysis")
                 st.markdown(st.session_state.processed_doc["summary"])
+
                 if st.session_state.prescription_data and isinstance(st.session_state.prescription_data, dict):
                     prescription = st.session_state.prescription_data
+
                     if "Medication Name(s)" in prescription and prescription["Medication Name(s)"]:
                         med_name = prescription["Medication Name(s)"]
                         interaction_prompt = f"""
@@ -541,15 +633,22 @@ def main():
                         Focus on practical pharmaceutical concerns.
                         """
                         analysis = query_gemini(interaction_prompt, model=GEMINI_PRO_MODEL)
-                        st.subheader("Pharmacist Analysis")
+                        st.subheader("🩺 Pharmacist Analysis")
                         st.markdown(analysis)
+
+                    # ✅ Ensure "Create Order" button appears even if pharmacist analysis is missing
+                    if st.button("🛒 Create Order from Prescription"):
+                        create_order_from_prescription()
+
             else:
-                st.info("Please upload a prescription document to begin analysis")
-        
+                st.info("📄 Please upload a prescription document to begin analysis.")
+
         with col2:
             if st.session_state.doc_preview:
-                st.subheader("Prescription Preview")
+                st.subheader("📷 Prescription Preview")
                 st.image(st.session_state.doc_preview, use_container_width=True)
+
+
 
     with tab2:
         st.subheader("📋 Medication Database")
@@ -599,11 +698,11 @@ def main():
     with tab3:
         st.subheader("🛒 Orders")
 
-        # ✅ Initialize order list in session state if not exists
+        # ✅ Load existing order from Firestore when the app starts
         if "order_list" not in st.session_state:
-            st.session_state.order_list = []
+            st.session_state.order_list = load_current_order()
 
-        # ✅ Medicine Selection Inputs
+        # ✅ Medicine Selection Inputs (Manual Order Entry)
         med_name = st.text_input("Enter Medicine Name")
         med_quantity = st.number_input("Enter Quantity", min_value=1, step=1)
 
@@ -612,33 +711,31 @@ def main():
 
             if med_details:
                 if med_quantity <= med_details["stock"]:
-                    # ✅ Add to session state order list
                     st.session_state.order_list.append({
                         "name": med_name,
                         "quantity": med_quantity,
                         "price": med_details["price"] * med_quantity
                     })
+                    save_order_to_firestore(st.session_state.order_list)  # ✅ Save ongoing order
                     st.success(f"{med_quantity} units of {med_name} added to order! ✅")
                 else:
                     st.error(f"Only {med_details['stock']} units available!")
             else:
                 st.error("Medicine not found in stock!")
 
-        # ✅ Display Order Summary
+        # ✅ Display Order Summary (Includes Manual & Prescription-Based Orders)
         if st.session_state.order_list:
             st.write("### 📝 Order Summary")
-            total_price = sum(item["price"] for item in st.session_state.order_list)
-
-            # ✅ Display Table
             order_df = pd.DataFrame(st.session_state.order_list)
             st.dataframe(order_df, use_container_width=True)
 
             # ✅ Place Order Button
             if st.button("✅ Place Order"):
-                place_order(st.session_state.order_list)
+                place_order()
 
         else:
-            st.info("No items in the order. Add medicines to order!")
+            st.info("No items in the order. Use 'Create Order from Prescription' in the Prescription tab or add manually.")
+
 
     
     with tab4:
