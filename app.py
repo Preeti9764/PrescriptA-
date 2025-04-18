@@ -24,10 +24,10 @@ from datetime import datetime
 
 # Check if Firebase is already initialized
 if not firebase_admin._apps:
-    cred = credentials.Certificate(r"C:\prescripta\prescripta-34da5-firebase-adminsdk-fbsvc-47b8c531e7.json")
-  # Use the correct path
-    firebase_admin.initialize_app(cred)
+    cred = credentials.Certificate(r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
 
+  # Use the correct path
+    firebase_admin.initialize_app(cred, {"projectId": "prescripta-34da5"})
 # Initialize Firestore
 db = firestore.client()
 
@@ -368,26 +368,41 @@ def process_prescription():
             else:
                 prescription_json = prescription_raw
                 
-            prescription_data = json.loads("prescription_json")
+            prescription_data = json.loads(prescription_json)
             
             # Create a simplified summary for display
+                       
             if isinstance(prescription_data, dict):
-                summary = f"**Patient**: {prescription_data.get('Patient Name', 'Unknown')}\n"
-                summary += f"**Medication**: {prescription_data.get('Medication Name(s)', 'Unknown')}\n"
-                summary += f"**Dosage**: {prescription_data.get('Dosage(s)', 'Unknown')}\n"
-                summary += f"**Instructions**: {prescription_data.get('Instructions', 'Unknown')}\n"
-                summary += f"**Quantity**: {prescription_data.get('Quantity', 'Unknown')}\n"
-                summary += f"**Refills**: {prescription_data.get('Refills', 'Unknown')}"
+                summary = """
+                👤 **Patient**: {patient}
+                🏥 **Doctor**: {doctor}
+                📅 **Prescription Date**: {date}
+                💊 **Medication**: {medications}
+                📏 **Dosage**: {dosage}
+                📖 **Instructions**: {instructions}
+                🔄 **Refills**: {refills}
+                """.format(
+                    patient=prescription_data.get("Patient Name", "Unknown"),
+                    doctor=prescription_data.get("Doctor Name", "Unknown"),
+                    date=prescription_data.get("Date of Prescription", "Unknown"),
+                    medications=prescription_data.get("Medication Name(s)", "Unknown"),
+                    dosage=prescription_data.get("Dosage(s)", "Unknown"),
+                    instructions=prescription_data.get("Instructions", "Unknown"),
+                    refills=prescription_data.get("Refills", "Unknown"),
+                )
+
             else:
                 summary = "Could not parse prescription data correctly."
                 prescription_data = {}
-            
+
+            # Store processed data
             st.session_state.processed_doc = {
-                "type": doc_type or "Unknown Document", 
-                "content": image_b64, 
+                "type": doc_type or "Unknown Document",
+                "content": image_b64,
                 "summary": summary
             }
             st.session_state.prescription_data = prescription_data
+
         except json.JSONDecodeError:
             # If JSON parsing fails, try a simpler approach
             summary_prompt = "Summarize this prescription with patient name, medication, dosage, and instructions."
@@ -619,22 +634,27 @@ def main():
             uploaded_file = st.file_uploader("Upload Prescription", type=["pdf", "png", "jpg", "jpeg"], key="uploaded_file", on_change=process_prescription)
             
             if st.session_state.processed_doc:
-                st.subheader("📑 Analysis")
-                st.markdown(st.session_state.processed_doc["summary"])
+                st.subheader("📑 Prescription Summary")
+                st.markdown(st.session_state.processed_doc["summary"], unsafe_allow_html=True)
+
+
 
                 if st.session_state.prescription_data and isinstance(st.session_state.prescription_data, dict):
                     prescription = st.session_state.prescription_data
 
                     if "Medication Name(s)" in prescription and prescription["Medication Name(s)"]:
                         med_name = prescription["Medication Name(s)"]
+
                         interaction_prompt = f"""
-                        As a pharmacist, review this prescription for {med_name} with dosage {prescription.get('Dosage(s)', 'unknown')}.
-                        Identify any potential issues, interactions, or warnings that should be considered.
-                        Focus on practical pharmaceutical concerns.
+                        As a pharmacist, provide a **short summary** of key warnings, side effects, and important instructions 
+                        for the prescribed medication: {med_name} (Dosage: {prescription.get('Dosage(s)', 'unknown')}).
+                        Keep it under **3 sentences**.
                         """
                         analysis = query_gemini(interaction_prompt, model=GEMINI_PRO_MODEL)
-                        st.subheader("🩺 Pharmacist Analysis")
-                        st.markdown(analysis)
+
+                        if analysis:
+                            analysis = ". ".join(analysis.split(".")[:3])  # Show only the first 3 sentences
+
 
                     # ✅ Ensure "Create Order" button appears even if pharmacist analysis is missing
                     if st.button("🛒 Create Order from Prescription"):
