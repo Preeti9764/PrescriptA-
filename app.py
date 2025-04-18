@@ -32,7 +32,7 @@ if not firebase_admin._apps:
         cred = credentials.Certificate(cred_dict)
     else:
         # Local development: Load from file
-        cred = credentials.Certificate(r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
+        cred = credentials.Certificate("PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
 
     firebase_admin.initialize_app(cred, {"projectId": "prescripta-34da5"})
 # Initialize Firestore
