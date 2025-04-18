@@ -24,9 +24,16 @@ from datetime import datetime
 
 # Check if Firebase is already initialized
 if not firebase_admin._apps:
-    cred = credentials.Certificate(r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
+    firebase_env = os.environ.get("FIREBASE_CREDENTIALS")
 
-  # Use the correct path
+    if firebase_env:
+        # On Render: Load from environment variable
+        cred_dict = json.loads(firebase_env)
+        cred = credentials.Certificate(cred_dict)
+    else:
+        # Local development: Load from file
+        cred = credentials.Certificate(r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
+
     firebase_admin.initialize_app(cred, {"projectId": "prescripta-34da5"})
 # Initialize Firestore
 db = firestore.client()
