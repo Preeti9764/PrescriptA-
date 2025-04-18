@@ -27,12 +27,10 @@ if not firebase_admin._apps:
     firebase_env = os.environ.get("FIREBASE_CREDENTIALS")
 
     if firebase_env:
-        # On Render: Load from environment variable
         cred_dict = json.loads(firebase_env)
         cred = credentials.Certificate(cred_dict)
     else:
-        # Local development: Load from file
-        cred = credentials.Certificate("PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json")
+        raise Exception("FIREBASE_CREDENTIALS environment variable not set.")
 
     firebase_admin.initialize_app(cred, {"projectId": "prescripta-34da5"})
 # Initialize Firestore
