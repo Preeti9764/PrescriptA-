@@ -64,9 +64,9 @@ def fetch_all_medicines():
 
 
 # Configuration - Replace with your API key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")  # For document processing
-GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-2.0-pro")  # For general knowledge queries
+GEMINI_API_KEY = "your_api_key"
+GEMINI_MODEL = "gemini-2.0-flash"  # For document processing
+GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
 
 
 def check_medicine_exists(med_name):
