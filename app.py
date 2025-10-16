@@ -62,7 +62,7 @@ def fetch_all_medicines():
 
 
 # Configuration - Replace with your API key
-GEMINI_API_KEY = "AIzaSyC56Rakq6bf6hCPTwExkwctgU2kSfVjPEo"
+GEMINI_API_KEY = "your_api_key"
 GEMINI_MODEL = "gemini-2.0-flash"  # For document processing
 GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
 
