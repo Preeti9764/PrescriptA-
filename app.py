@@ -15,26 +15,34 @@ import re
 import pandas as pd
 import io
 from datetime import datetime
+import os
 import firebase_admin
 from firebase_admin import credentials, firestore
-import os
 
 import pandas as pd
 
 from datetime import datetime
 
-# Check if Firebase is already initialized
+# Firebase initialization (supports Render env vars)
 if not firebase_admin._apps:
-    firebase_env = os.environ.get("FIREBASE_CREDENTIALS")
+    firebase_credentials_json = os.getenv("FIREBASE_CREDENTIALS_JSON")
+    firebase_project_id = os.getenv("FIREBASE_PROJECT_ID", "prescripta-34da5")
 
-    if firebase_env:
-        cred_dict = json.loads(firebase_env)
-        cred = credentials.Certificate(cred_dict)
+    if firebase_credentials_json:
+        cred = credentials.Certificate(json.loads(firebase_credentials_json))
+        firebase_admin.initialize_app(cred, {"projectId": firebase_project_id})
     else:
-        raise Exception("FIREBASE_CREDENTIALS environment variable not set.")
+        # Fallback to local file path for local development
+        local_credentials_path = r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json"
+        if os.path.exists(local_credentials_path):
+            cred = credentials.Certificate(local_credentials_path)
+            firebase_admin.initialize_app(cred, {"projectId": firebase_project_id})
+        else:
+            raise RuntimeError(
+                "Firebase credentials not found. Set FIREBASE_CREDENTIALS_JSON env var or place the JSON at the expected path."
+            )
 
-    firebase_admin.initialize_app(cred, {"projectId": "prescripta-34da5"})
-# Initialize Firestore
+# Initialize Firestore client
 db = firestore.client()
 
 def fetch_all_medicines():
@@ -61,9 +69,34 @@ GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
 
 def check_medicine_exists(med_name):
     """Check if a medicine exists in Firestore and return its details."""
-    doc_ref = db.collection("medications").document(med_name.lower())
+    if not med_name or not str(med_name).strip():
+        return None
+    doc_ref = db.collection("medications").document(str(med_name).strip().lower())
     doc = doc_ref.get()
     return doc.to_dict() if doc.exists else None
+
+def format_prescription_summary(prescription_data):
+    """Formats the prescription summary with sections separated by one line and bullet points for instructions."""
+    if not prescription_data or not isinstance(prescription_data, dict):
+        return "Could not parse prescription data correctly."
+
+    summary_lines = []
+
+    for key, value in prescription_data.items():
+        if isinstance(value, list):
+            if key.lower() == "instructions":
+                # Bullet points for instructions
+                value = "\n- " + "\n- ".join(map(str, value))  # Bullet points formatting
+            else:
+                value = ", ".join(map(str, value))  # Normal list formatting
+        
+        summary_lines.append(f"**{key.replace('_', ' ')}:** {value}\n")  # Ensures one line gap
+
+    return "\n".join(summary_lines)  # Keeps proper spacing
+
+
+
+
 
 def place_order(order_list):
     """Place an order and reduce stock in Firestore."""
@@ -641,7 +674,10 @@ def main():
             
             if st.session_state.processed_doc:
                 st.subheader("📑 Prescription Summary")
-                st.markdown(st.session_state.processed_doc["summary"], unsafe_allow_html=True)
+                if st.session_state.prescription_data:
+                    formatted_summary = format_prescription_summary(st.session_state.prescription_data)
+                    st.markdown(formatted_summary, unsafe_allow_html=True)
+
 
 
 
