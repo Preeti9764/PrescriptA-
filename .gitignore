@@ -1,1 +1,7 @@
+# Ignore environment files
+.env
 
+# Ignore Firebase service account JSONs
+prescripta-34da5-firebase-adminsdk-fbsvc-60860691f7.json
+*.serviceaccount.json
+*.firebase-adminsdk-*.json

@@ -5,3 +5,4 @@ pdf2image
 schedule
 pandas
 firebase-admin
+python-dotenv

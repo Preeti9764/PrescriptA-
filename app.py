@@ -18,10 +18,12 @@ from datetime import datetime
 import os
 import firebase_admin
 from firebase_admin import credentials, firestore
+from dotenv import load_dotenv
 
 import pandas as pd
 
 from datetime import datetime
+load_dotenv()
 
 # Firebase initialization (supports Render env vars)
 if not firebase_admin._apps:
@@ -32,14 +34,14 @@ if not firebase_admin._apps:
         cred = credentials.Certificate(json.loads(firebase_credentials_json))
         firebase_admin.initialize_app(cred, {"projectId": firebase_project_id})
     else:
-        # Fallback to local file path for local development
-        local_credentials_path = r"C:\PriscriptA\prescripta-34da5-firebase-adminsdk-fbsvc-7f02105259.json"
-        if os.path.exists(local_credentials_path):
-            cred = credentials.Certificate(local_credentials_path)
+        # Fallback to local file path from env for local development
+        firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
+        if firebase_credentials_path and os.path.exists(firebase_credentials_path):
+            cred = credentials.Certificate(firebase_credentials_path)
             firebase_admin.initialize_app(cred, {"projectId": firebase_project_id})
         else:
             raise RuntimeError(
-                "Firebase credentials not found. Set FIREBASE_CREDENTIALS_JSON env var or place the JSON at the expected path."
+                "Firebase credentials not found. Set FIREBASE_CREDENTIALS_JSON or FIREBASE_CREDENTIALS_PATH env var."
             )
 
 # Initialize Firestore client
@@ -62,9 +64,9 @@ def fetch_all_medicines():
 
 
 # Configuration - Replace with your API key
-GEMINI_API_KEY = "AIzaSyC56Rakq6bf6hCPTwExkwctgU2kSfVjPEo"
-GEMINI_MODEL = "gemini-2.0-flash"  # For document processing
-GEMINI_PRO_MODEL = "gemini-2.0-pro"  # For general knowledge queries
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")  # For document processing
+GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-2.0-pro")  # For general knowledge queries
 
 
 def check_medicine_exists(med_name):
@@ -340,7 +342,10 @@ def encode_file(uploaded_file):
 def query_gemini(prompt, image_b64=None, model=GEMINI_MODEL):
     """Query Gemini API efficiently with reduced response time."""
     try:
-        url = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+        if not GEMINI_API_KEY:
+            st.error("GEMINI_API_KEY is not set in environment variables.")
+            return None
+        url = f"https://generativelanguage.googleapis.com/v1/models/{model}:generateContent?key={GEMINI_API_KEY}"
         parts = [{"text": prompt}]
         if image_b64:
             parts.append({"inline_data": {"mime_type": "image/jpeg", "data": image_b64}})
